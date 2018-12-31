@@ -4,7 +4,7 @@ films = {
     "Tarazan" : [15, 5],
     "Ghost Busters" : [12, 5]
     }
-# Test 
+# Test
 while True:
     choice = input("What movie would you like to watch?").strip().title()
 
@@ -25,3 +25,4 @@ while True:
 
     else:
         print("I'm sorry. We don't have that film")
+        print("Perhaps you're at the wrong theater")
