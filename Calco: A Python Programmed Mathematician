@@ -1,0 +1,99 @@
+import os
+import speech_recognition as sr
+import time
+
+
+def RecordAudio():
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        print("Please say two numbers (with the operation name between them)")
+        audio = r.listen(source)
+
+    data = ""
+    try:
+        data = r.recognize_google(audio)
+        print("You said: " + data)
+    except sr.UnknownValueError:
+        print("Google Speech Recognition could not understand audio")
+    except sr.RequestError as e:
+        print("Could not request results from Google Speech Recognition service; {0}".format(e))
+
+    return data
+
+
+def SolveSum(data):
+    datalist = data.split()
+    number1 = int(datalist[2])
+    number2 = int(datalist[4])
+    sum = number1 + number2
+    sum = str(sum)
+    if int(sum) < 0:
+        positivesum = int(sum)
+        positivesum = -positivesum
+        os.system("say the answer is negative " + str(positivesum))
+    else:
+        os.system("say the answer is " + sum)
+        print(sum)
+
+def SolveMultiplication(data):
+    datalist = data.split()
+    number1 = int(datalist[2])
+    number2 = int(datalist[4])
+    product = number1 * number2
+    product = str(product)
+    if int(product) < 0:
+        positiveproduct = int(product)
+        positiveproduct = -positiveproduct
+        os.system("say the answer is negative " + str(positiveproduct))
+    else:
+        os.system("say the answer is " + product)
+        print(product)
+
+def SolveSubtraction(data):
+    datalist = data.split()
+    number1 = int(datalist[2])
+    number2 = int(datalist[4])
+    difference = number1 - number2
+    difference = str(difference)
+    if int(difference) < 0:
+        positivedifference = int(difference)
+        positivedifference = -positivedifference
+        os.system("say the answer is negative " + str(positivedifference))
+    else:
+        os.system("say the answer is " + difference)
+        print(difference)
+
+def SolveDivision(data):
+    datalist = data.split()
+    number1 = int(datalist[2])
+    number2 = int(datalist[4])
+    quotient = int(number1 / number2)
+    quotient = str(quotient)
+    if number2 == 0:
+        os.system(" say that is undefined")
+    elif number1 == 0:
+        os.system("say the answer is 0")
+    elif int(quotient) < 0:
+        positivequotient = int(quotient)
+        positivequotient = -positivequotient
+        os.system("say the answer is negative " + str(positivequotient))
+    else:
+        os.system("say the answer is " + quotient)
+        print(quotient)
+
+os.system("say  Hi! My name is Calco! Please follow the directions displayed on screen ")
+while True:
+    time.sleep(2)
+    userWords = RecordAudio()
+    datalistOne = userWords.split()
+
+    if ( len(datalistOne) != 5):
+        print("Moving on ")
+    elif datalistOne[3] == "+":
+        SolveSum(userWords)
+    elif datalistOne[3] == "*":
+        SolveMultiplication(userWords)
+    elif datalistOne[3] == "-":
+        SolveSubtraction(userWords)
+    elif datalistOne[3] == "/":
+        SolveDivision(userWords)
