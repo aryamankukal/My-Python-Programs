@@ -1,0 +1,51 @@
+import speech_recognition as sr
+import smtplib
+
+def RecordAudio():
+    r = sr.Recognizer()
+    with sr.Microphone() as source:
+        audio = r.listen(source)
+
+    data = ""
+    try:
+        data = r.recognize_google(audio)
+        print("You said: " + data)
+
+        first = data.split(' ', 1)[0]
+        if first == "who" or first == "what" or first == "when" or first == "where" or first == "why" or first == "how":
+            data = data + "?"
+        else:
+            data = data + "."
+
+    except sr.UnknownValueError:
+        print("Google Speech Recognition could not understand audio")
+    except sr.RequestError as e:
+        print("Could not request results from Google Speech Recognition service; {0}".format(e))
+
+    return data.capitalize().strip()
+
+SENDER_ADDRESS = " **SOME_EMAIL_ADDRESS** "
+RECIEVER_ADDRESS = " **SOME_EMAIL_ADDRESS** "
+PASSWORD = " **SOME_PASSWORD** "
+
+def send_email(subject, msg):
+    try:
+        server = smtplib.SMTP('smtp.gmail.com:587')
+        server.ehlo()
+        server.starttls()
+        server.login(SENDER_ADDRESS, PASSWORD)
+        message = 'Subject: {}\n\n{}'.format(subject, msg)
+        server.sendmail(SENDER_ADDRESS, RECIEVER_ADDRESS, message)
+        print("Success: Email sent!")
+    except:
+        print("Email failed to send.")
+
+print("What's the subject?")
+print()
+usersubject = RecordAudio()
+print()
+print("What's your message?")
+print()
+usermessage = RecordAudio()
+
+send_email(usersubject, usermessage)
