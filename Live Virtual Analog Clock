@@ -1,0 +1,96 @@
+from turtle import Turtle, Screen
+import datetime
+
+# get the current time and convert to the hand's angles
+wn = Screen()
+wn.title("Clock")
+wn.bgcolor("saddlebrown")
+wn.setup(width=800, height=800)
+currentDT = datetime.datetime.now()
+
+# outside circle
+circle = Turtle()
+circle.shape("circle")
+circle.color("gold")
+circle.shapesize(stretch_wid=39, stretch_len=39)
+
+# inside circle
+insideCircle = Turtle()
+insideCircle.shape("circle")
+insideCircle.color("black")
+insideCircle.shapesize(stretch_wid=1.5, stretch_len=1.5)
+
+# hour hand
+hourHand = Turtle()
+hourHand.shape("arrow")
+hourHand.color("black")
+hourHand.speed(10)
+hourHand.shapesize(stretch_wid=0.4, stretch_len=18)
+
+# minute hand
+minuteHand = Turtle()
+minuteHand.shape("arrow")
+minuteHand.color("black")
+minuteHand.speed(10)
+minuteHand.shapesize(stretch_wid=0.4, stretch_len=26)
+
+# second hand
+secondHand = Turtle()
+secondHand.shape("arrow")
+secondHand.color("black")
+secondHand.speed(10)
+secondHand.shapesize(stretch_wid=0.4, stretch_len=37)
+
+# numbers with pen
+pen = Turtle()
+pen.speed(0)
+pen.color("black")
+pen.penup()
+pen.hideturtle()
+pen.goto(0, 300)
+pen.write("12", align="center", font=("Courier", 50, "normal"))
+pen.penup()
+pen.hideturtle()
+pen.goto(340, -30)
+pen.write("3", align="center", font=("Courier", 50, "normal"))
+pen.penup()
+pen.hideturtle()
+pen.goto(0, -370)
+pen.write("6", align="center", font=("Courier", 50, "normal"))
+pen.penup()
+pen.hideturtle()
+pen.goto(-340, -30)
+pen.write("9", align="center", font=("Courier", 50, "normal"))
+
+# moving hour hand
+def moveHourHand():
+   currentHourInternal = datetime.datetime.now().hour
+   degree = (currentHourInternal - 15) * -30
+   currentMinuteInternal = datetime.datetime.now().minute
+   degree = degree + -0.5 * currentMinuteInternal
+   hourHand.setheading(degree)
+   wn.ontimer(moveHourHand, 60000)
+
+
+# moving minute hand
+def moveMinuteHand():
+    currentMinuteInternal = datetime.datetime.now().minute
+    degree = (currentMinuteInternal - 15) * -6
+    currentSecondInternal = datetime.datetime.now().second
+    degree = degree + (-currentSecondInternal * 0.1)
+    minuteHand.setheading(degree)
+    wn.ontimer(moveMinuteHand, 1000)
+
+
+# moving second hand
+def moveSecondHand():
+    currentSecondInternal = datetime.datetime.now().second
+    degree = (currentSecondInternal - 15) * -6
+    secondHand.setheading(degree)
+    wn.ontimer(moveSecondHand, 1000)
+
+wn.ontimer(moveHourHand, 1)
+wn.ontimer(moveMinuteHand, 1)
+wn.ontimer(moveSecondHand, 1)
+
+wn.exitonclick()
